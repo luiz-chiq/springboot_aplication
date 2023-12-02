@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 public class SaleController {
 
@@ -46,7 +49,7 @@ public class SaleController {
         if(!salessList.isEmpty()){
             for (SaleModel product: salessList) {
                 UUID id = product.getIdSale();
-
+                product.add(linkTo(methodOn(SaleController.class).getOneProduct(id)).withSelfRel());
             }
         }
         return ResponseEntity.status(HttpStatus.OK).body(salessList);
@@ -58,6 +61,7 @@ public class SaleController {
         if(sale.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sale not found.");
         }
+        sale.get().add(linkTo(methodOn(SaleController.class).getAllSales()).withSelfRel());
         return ResponseEntity.status(HttpStatus.OK).body(sale.get());
     }
 }
