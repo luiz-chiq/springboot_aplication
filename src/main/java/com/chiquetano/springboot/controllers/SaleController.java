@@ -39,4 +39,15 @@ public class SaleController {
         saleModel.setValue();
         return ResponseEntity.status(HttpStatus.CREATED).body(saleRepository.save(saleModel));
     }
+
+    @GetMapping("/sales")
+    public ResponseEntity<List<SaleModel>> getAllSales(){
+        List<SaleModel> salessList = saleRepository.findAll();
+        if(!salessList.isEmpty()){
+            for (SaleModel product: salessList) {
+                UUID id = product.getIdSale();
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(salessList);
+    }
 }
