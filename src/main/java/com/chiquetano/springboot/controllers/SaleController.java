@@ -46,8 +46,18 @@ public class SaleController {
         if(!salessList.isEmpty()){
             for (SaleModel product: salessList) {
                 UUID id = product.getIdSale();
+
             }
         }
         return ResponseEntity.status(HttpStatus.OK).body(salessList);
+    }
+
+    @GetMapping("/sales/{id}")
+    public ResponseEntity<Object> getOneProduct(@PathVariable(value="id") UUID id){
+        Optional<SaleModel> sale = saleRepository.findById(id);
+        if(sale.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sale not found.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(sale.get());
     }
 }
