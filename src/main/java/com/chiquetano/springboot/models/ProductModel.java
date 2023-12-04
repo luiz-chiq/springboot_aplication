@@ -5,7 +5,6 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.UUID;
 
 @Entity
@@ -25,7 +24,7 @@ public class ProductModel extends RepresentationModel<ProductModel> implements S
     private String name;
 
     @Column(name = "category")
-    private Category category;
+    private ProductCategory category;
 
 
     public UUID getIdProduct() {
@@ -57,12 +56,12 @@ public class ProductModel extends RepresentationModel<ProductModel> implements S
     }
 
     public void setCategory(String category) {
-        for (Category cat : Category.values()) {
+        for (ProductCategory cat : ProductCategory.values()) {
             if (cat.name().equalsIgnoreCase(category)) {
-                this.category = Category.valueOf(category.toUpperCase());
+                this.category = ProductCategory.valueOf(category.toUpperCase());
                 return;
             }
         }
-        this.category = Category.OTHER;
+        this.category = ProductCategory.OTHER;
     }
 }

@@ -1,6 +1,6 @@
 package com.chiquetano.springboot.models;
 
-public enum Category {
+public enum ProductCategory {
     HOME,
     SPORTS,
     CLOTHES,
