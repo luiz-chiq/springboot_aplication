@@ -18,6 +18,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
+@RequestMapping("/sales")
 public class SaleController {
 
     @Autowired
@@ -26,7 +27,7 @@ public class SaleController {
     @Autowired
     ProductRepository productRepository;
 
-    @PostMapping("/sales")
+    @PostMapping
     public ResponseEntity<SaleModel> saveSale(@RequestBody @Valid SaleRecordDto saleRecordDto) {
         var saleModel = new SaleModel();
         BeanUtils.copyProperties(saleRecordDto, saleModel);
@@ -43,7 +44,7 @@ public class SaleController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saleRepository.save(saleModel));
     }
 
-    @GetMapping("/sales")
+    @GetMapping
     public ResponseEntity<List<SaleModel>> getAllSales(){
         List<SaleModel> salessList = saleRepository.findAll();
         if(!salessList.isEmpty()){
@@ -55,7 +56,7 @@ public class SaleController {
         return ResponseEntity.status(HttpStatus.OK).body(salessList);
     }
 
-    @GetMapping("/sales/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Object> getOneProduct(@PathVariable(value="id") UUID id){
         Optional<SaleModel> sale = saleRepository.findById(id);
         if(sale.isEmpty()){
