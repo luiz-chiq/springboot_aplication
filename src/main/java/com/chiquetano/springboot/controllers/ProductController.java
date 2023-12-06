@@ -3,6 +3,8 @@ package com.chiquetano.springboot.controllers;
 import com.chiquetano.springboot.dtos.ProductRecordDto;
 import com.chiquetano.springboot.models.ProductModel;
 import com.chiquetano.springboot.repositories.ProductRepository;
+import com.chiquetano.springboot.services.ProductService;
+import com.chiquetano.springboot.services.ProductServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +22,18 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ProductController {
 
     @Autowired
-    ProductRepository productRepository;
+    ProductService productService;
 
     @PostMapping
     public ResponseEntity<ProductModel> saveProduct(@RequestBody @Valid ProductRecordDto productRecordDto) {
         var productModel = new ProductModel();
         BeanUtils.copyProperties(productRecordDto, productModel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(productRepository.save(productModel));
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.save(productModel));
     }
 
     @GetMapping
     public ResponseEntity<List<ProductModel>> getAllProducts(){
-        List<ProductModel> productsList = productRepository.findAll();
+        List<ProductModel> productsList = productService.findAll();
         if(!productsList.isEmpty()){
             for (ProductModel product: productsList) {
                 UUID id = product.getIdProduct();
@@ -43,7 +45,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOneProduct(@PathVariable(value="id") UUID id){
-        Optional<ProductModel> product = productRepository.findById(id);
+        Optional<ProductModel> product = productService.findOne(id);
         if(product.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
         }
@@ -54,22 +56,22 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateProduct(@PathVariable(value="id") UUID id,
                                                  @RequestBody @Valid ProductRecordDto productRecordDto){
-        Optional<ProductModel> product = productRepository.findById(id);
+        Optional<ProductModel> product = productService.findOne(id);
         if(product.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
         }
         var productModel = product.get();
         BeanUtils.copyProperties(productRecordDto, productModel);
-        return ResponseEntity.status(HttpStatus.OK).body(productRepository.save(productModel));
+        return ResponseEntity.status(HttpStatus.OK).body(productService.save(productModel));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable(value="id") UUID id){
-        Optional<ProductModel> product = productRepository.findById(id);
+        Optional<ProductModel> product = productService.findOne(id);
         if(product.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
         }
-        productRepository.delete(product.get());
+        productService.delete(product.get());
         return ResponseEntity.status(HttpStatus.OK).body("Product deleted successfully");
     }
 
