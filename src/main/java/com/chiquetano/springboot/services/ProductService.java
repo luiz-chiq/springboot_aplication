@@ -13,7 +13,6 @@ public interface ProductService {
     ProductModel save(ProductModel productModel);
     List<ProductModel> findAll();
     Optional<ProductModel> findOne(UUID id);
-    ProductModel update(ProductModel productModel);
-    void delete(UUID id);
+    void delete(ProductModel productModel);
 
 }
