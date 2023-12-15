@@ -1,6 +1,7 @@
 package com.chiquetano.springboot.controllers;
 
 import com.chiquetano.springboot.dtos.ProductRecordDto;
+import com.chiquetano.springboot.models.ProductCategory;
 import com.chiquetano.springboot.models.ProductModel;
 import com.chiquetano.springboot.repositories.ProductRepository;
 import com.chiquetano.springboot.services.ProductService;
@@ -73,6 +74,11 @@ public class ProductController {
         }
         productService.delete(product.get());
         return ResponseEntity.status(HttpStatus.OK).body("Product deleted successfully");
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<Object> getCategories(){
+        return ResponseEntity.status(HttpStatus.OK).body(ProductCategory.values());
     }
 
 
